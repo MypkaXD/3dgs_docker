@@ -1,3 +1,6 @@
+Docker container для сборки и тестирования проекта 3D Gaussian Splatting (https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/).
+После выполнения пользователь получит готовую модель (формат .ply), набор новых изображений, результаты сравнения изображения с исходными данными
+
 1. git clone https://github.com/MypkaXD/3dgs_docker.git
 2. cd 3dgs_docker
 3. docker build -t 3dgs .
