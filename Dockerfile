@@ -28,12 +28,8 @@ RUN apt-get update && \
         xvfb
 RUN git clone https://github.com/graphdeco-inria/gaussian-splatting.git --recursive
 RUN pip install --no-cache-dir torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
-RUN pip install --no-cache-dir plyfile==1.1.3 tqdm opencv-python joblib
+RUN pip install --no-cache-dir plyfile==1.1.3 tqdm opencv-python joblib matplotlib numpy scikit-image
 
 COPY script.sh dataset .
 
 RUN dos2unix script.sh
-
-ENTRYPOINT ["./script.sh"]
-
-CMD []
