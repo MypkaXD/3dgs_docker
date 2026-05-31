@@ -6,6 +6,12 @@ import json
 from skimage.metrics import structural_similarity as ssim
 from skimage.metrics import peak_signal_noise_ratio as psnr
 
+def resize_to_match(img1, img2):
+    if img1.shape != img2.shape:
+        print(f"Resizing from {img2.shape} to {img1.shape}")
+        img2 = cv2.resize(img2, (img1.shape[1], img1.shape[0]), interpolation=cv2.INTER_LANCZOS4)
+    return img2
+
 def main():
 
     print("Starting compare results")
@@ -19,7 +25,7 @@ def main():
 
     my_output_images_paths = np.array([os.path.join(os.getcwd(), path_to_my_output_folder, "test", "ours_1000", "renders", f"{file}") for file in os.listdir(os.path.join(path_to_my_output_folder, "test", "ours_1000", "renders"))])
     user_output_images_paths = np.array([os.path.join(os.getcwd(), path_to_user_output_folder, "test", "ours_1000", "renders", f"{file}") for file in os.listdir(os.path.join(path_to_user_output_folder, "test", "ours_1000", "renders"))])
-    gt_images_paths = np.array([os.path.join(os.getcwd(), path_to_user_output_folder, "test", "ours_1000", "gt", f"{file}") for file in os.listdir(os.path.join(path_to_user_output_folder, "test", "ours_1000", "gt"))])
+    gt_images_paths = np.array([os.path.join(os.getcwd(), path_to_my_output_folder, "test", "ours_1000", "gt", f"{file}") for file in os.listdir(os.path.join(path_to_my_output_folder, "test", "ours_1000", "gt"))])
     
     my_output_images_paths = np.sort(my_output_images_paths)
     user_output_images_paths = np.sort(user_output_images_paths)
@@ -121,6 +127,8 @@ def main():
     ssim_values = []
     psnr_values = []
 
+    os.makedirs(os.path.join(os.getcwd(), "result", "renders"), exist_ok=True)
+
     for i in range(0, count_of_img):
         
         fig, axis = plt.subplots(nrows=1, ncols=6, figsize=(plt_size[0] * 6, plt_size[1] * 1))
@@ -135,14 +143,21 @@ def main():
         print(f"Path to user_output img: {user_output_img_path}")
         print(f"Path to gt img: {gt_img_path}")
 
-        my_output_img = cv2.imread(my_output_img_path)
-        my_output_img_rgb = cv2.cvtColor(my_output_img, cv2.COLOR_BGR2RGB)
-        
-        user_output_img = cv2.imread(user_output_img_path)
-        user_output_img_rgb = cv2.cvtColor(user_output_img, cv2.COLOR_BGR2RGB)
-        
         gt_img = cv2.imread(gt_img_path)
         gt_img_rgb = cv2.cvtColor(gt_img, cv2.COLOR_BGR2RGB)
+
+        my_output_img = cv2.imread(my_output_img_path)
+        user_output_img = cv2.imread(user_output_img_path)
+        
+        my_output_img = resize_to_match(gt_img, my_output_img)
+        user_output_img = resize_to_match(gt_img, user_output_img)
+        
+        my_output_img_rgb = cv2.cvtColor(my_output_img, cv2.COLOR_BGR2RGB)
+        user_output_img_rgb = cv2.cvtColor(user_output_img, cv2.COLOR_BGR2RGB)
+
+        print(gt_img.shape)
+        print(my_output_img.shape)
+        print(user_output_img.shape)
 
         axis[0].imshow(my_output_img_rgb)
         axis[0].set_title(f"My Output img {i}")
