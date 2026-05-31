@@ -1,6 +1,6 @@
 # FROM ubuntu:24.04
 # FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
-FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN apt-get update && \
         dos2unix \
         xvfb
 RUN git clone https://github.com/graphdeco-inria/gaussian-splatting.git --recursive
-pip install --no-cache-dir torch==2.11.0 torchvision==0.26.0 torchaudio==2.11.0 --index-url https://download.pytorch.org/whl/cu128
+RUN pip install --no-cache-dir torch==2.11.0 torchvision==0.26.0 torchaudio==2.11.0 --index-url https://download.pytorch.org/whl/cu128
 RUN pip install --no-cache-dir plyfile==1.1.3 tqdm opencv-python joblib matplotlib numpy scikit-image
 
 COPY script.sh dataset .
