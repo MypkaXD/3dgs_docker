@@ -171,16 +171,20 @@ def main():
         axis[2].set_title(f"Ground Truth img {i}")
         axis[2].axis('off')
 
-        axis[3].imshow(cv2.absdiff(my_output_img, gt_img))
-        axis[3].set_title(f"My Output/Ground Truth img {i}")
+        diff_my_output_gt = cv2.absdiff(my_output_img, gt_img)
+        # diff_normalized = cv2.normalize(diff_my_output_gt, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+        axis[3].imshow(diff_my_output_gt)
+        axis[3].set_title(f"My Output/Ground Truth img {i} (max diff: {np.max(diff_my_output_gt)})")
         axis[3].axis('off')
 
-        axis[4].imshow(cv2.absdiff(user_output_img, gt_img))
-        axis[4].set_title(f"User Output/Ground Truth img {i}")
+        diff_user_output_output_gt = cv2.absdiff(user_output_img, gt_img)
+        axis[4].imshow(diff_user_output_output_gt)
+        axis[4].set_title(f"User Output/Ground Truth img {i} (max diff: {np.max(diff_user_output_output_gt)})")
         axis[4].axis('off')
 
-        axis[5].imshow(cv2.absdiff(my_output_img, user_output_img))
-        axis[5].set_title(f"My Output/User Ouput img {i}")
+        diff_user_output_my_output = cv2.absdiff(my_output_img, user_output_img)
+        axis[5].imshow(diff_user_output_my_output)
+        axis[5].set_title(f"My Output/User Ouput img {i} (max diff: {np.max(diff_user_output_my_output)})")
         axis[5].axis('off')
         
         plt.savefig(os.path.join(save_result_folder, "renders", f"renders_{i}.png"), dpi=300)
